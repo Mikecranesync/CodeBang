@@ -105,6 +105,75 @@ Update the learning spec with gaps, then re-ingest.
 
 ---
 
+## Phase 0.5: Cloud Dev Box Setup ✅
+
+**Goal:** Make CodeBang and Agent-Factory accessible via SSH from laptop/Android with minimal setup overhead.
+
+**Status:** Implemented
+
+### What Was Created
+
+Three helper scripts in `CodeBang/scripts/`:
+
+1. **setup_vm.sh** - One-time VM setup
+   - Checks Claude Code CLI installation
+   - Installs Python dependencies (python-dotenv, openai, requests, pyyaml)
+   - Verifies Agent-Factory .env configuration
+   - Provides next steps guidance
+
+2. **start_kb_api.sh** - KB API startup helper
+   - Checks if API already running at http://localhost:8000
+   - Locates Agent-Factory repository
+   - Starts uvicorn server (poetry or pip mode)
+   - Verifies successful startup with health check
+   - Writes logs to /tmp/kb_api.log
+
+3. **start_claude.sh** - Main entry point
+   - Unified launcher for both CodeBang and Agent-Factory repos
+   - Optional KB API startup with `--with-kb` flag
+   - Shows context files available to Claude
+   - Launches Claude Code in interactive mode
+
+### Usage on Fresh Cloud VM
+
+```bash
+# One-time setup
+mkdir ~/repos && cd ~/repos
+git clone <codebang-url> CodeBang
+git clone <agent-factory-url> "Agent Factory"
+
+cd CodeBang
+./scripts/setup_vm.sh
+
+# Configure Agent-Factory (if using KB)
+cd "../Agent Factory"
+cp .env.example .env
+nano .env  # Add API keys
+
+# Start working
+cd ~/repos/CodeBang
+./scripts/start_claude.sh                   # Work on CodeBang
+./scripts/start_claude.sh codebang --with-kb  # Work on CodeBang + KB API
+./scripts/start_claude.sh agent-factory     # Work on Agent-Factory
+```
+
+### From Laptop/Android
+
+```bash
+ssh user@your-vm-ip
+cd ~/repos/CodeBang
+./scripts/start_claude.sh
+```
+
+### Documentation Updates
+
+- **CLAUDE.md** - Added "Cloud Dev Box Quick Start" section at top
+- **This file** - Added Phase 0.5 documentation
+
+**Milestone:** User can SSH into cloud VM, run one command (`./scripts/start_claude.sh`), and immediately work with Claude Code having full DevCTO context.
+
+---
+
 ## Phase 1: Design the DevCTO Repo (Still Using Agent-Factory)
 
 ### 1.1 Repo Design Document

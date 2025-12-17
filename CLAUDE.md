@@ -1,5 +1,52 @@
 # CLAUDE.md
 
+## Cloud Dev Box Quick Start
+
+**On a fresh cloud VM:**
+
+1. **Clone the repos:**
+   ```bash
+   mkdir ~/repos && cd ~/repos
+   git clone <codebang-repo-url> CodeBang
+   git clone <agent-factory-repo-url> "Agent Factory"
+   ```
+
+2. **One-time setup:**
+   ```bash
+   cd CodeBang
+   ./scripts/setup_vm.sh
+   ```
+
+3. **Configure Agent-Factory (if using KB):**
+   ```bash
+   cd "../Agent Factory"
+   cp .env.example .env
+   # Edit .env with your API keys (OPENAI_API_KEY, SUPABASE_URL, etc.)
+   ```
+
+4. **Start working:**
+   ```bash
+   cd ~/repos/CodeBang
+
+   # Option 1: Work on CodeBang (DevCTO bootstrap)
+   ./scripts/start_claude.sh codebang
+
+   # Option 2: Work on CodeBang with KB API running
+   ./scripts/start_claude.sh codebang --with-kb
+
+   # Option 3: Work on Agent-Factory
+   ./scripts/start_claude.sh agent-factory
+   ```
+
+5. **From laptop/Android:**
+   ```bash
+   ssh user@your-vm-ip
+   cd ~/repos/CodeBang
+   ./scripts/start_claude.sh
+   ```
+
+---
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
